@@ -1,0 +1,17 @@
+name: BixbyMarket
+author: alvin0319
+main: alvin0319\BixbyMarket\BixbyMarket
+version: 1.0.0
+api: 3.0.0
+
+permissions:
+  bixbymarket.command.create:
+    default: op
+  bixbymarket.command.remove:
+    default: op
+  bixbymarket.command.create_category:
+    default: op
+  bixbymarket.command.remove_category:
+    default: op
+  bixbymarket.command.open_category:
+    default: true
