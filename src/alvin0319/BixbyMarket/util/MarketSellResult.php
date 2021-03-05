@@ -43,6 +43,7 @@ final class MarketSellResult{
 	}
 
 	public static function __callStatic(string $name, array $arguments = []) : MarketBuyResult{
+		self::lazyInit();
 		if(!isset(self::$registries[strtolower($name)])){
 			throw new BadMethodCallException("Call to undefined static method " . get_class(self::class) . "::" . strtoupper($name) . "()");
 		}

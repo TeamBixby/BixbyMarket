@@ -26,7 +26,7 @@ final class BixbyMarket extends PluginBase{
 			InvMenuHandler::register($this);
 		}
 		$this->marketManager = new MarketManager();
-		$this->categoryManager = new CategoryManager();
+		$this->categoryManager = new CategoryManager([]);
 	}
 
 	public function getMarketManager() : MarketManager{
