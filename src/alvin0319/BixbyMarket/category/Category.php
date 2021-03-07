@@ -15,7 +15,9 @@ final class Category implements JsonSerializable{
 	/** @var Market[] */
 	protected array $markets = [];
 
-	public function __construct(string $name, array $markets){
+	protected Item $item;
+
+	public function __construct(string $name, array $markets, Item $item){
 		$this->name = $name;
 		foreach($markets as $position => $marketId){
 			$market = BixbyMarket::getInstance()->getMarketManager()->getMarketById($marketId);
@@ -23,6 +25,7 @@ final class Category implements JsonSerializable{
 				$this->markets[$position] = $market;
 			}
 		}
+		$this->item = $item;
 	}
 
 	public function getName() : string{
@@ -72,6 +75,10 @@ final class Category implements JsonSerializable{
 		}
 	}
 
+	public function getItem() : Item{
+		return clone $this->item;
+	}
+
 	public function jsonSerialize() : array{
 		$res = [];
 		foreach($this->markets as $index => $market){
@@ -79,11 +86,12 @@ final class Category implements JsonSerializable{
 		}
 		return [
 			"name" => $this->name,
-			"markets" => $res
+			"markets" => $res,
+			"item" => $this->item->jsonSerialize()
 		];
 	}
 
 	public static function jsonDeserialize(array $data) : Category{
-		return new Category($data["name"], $data["markets"]);
+		return new Category($data["name"], $data["markets"], Item::jsonDeserialize($data["item"]));
 	}
 }
