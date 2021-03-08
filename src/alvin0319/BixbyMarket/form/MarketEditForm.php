@@ -43,12 +43,12 @@ final class MarketEditForm implements Form{
 		}
 		[$buyPrice, $sellPrice] = $data;
 
-		if(!is_numeric($buyPrice) || !is_numeric($sellPrice) || ($buyPrice = (int) $buyPrice) < -1 || ($sellPrice = (int) $sellPrice) < -1){
+		if(!is_numeric($buyPrice) || !is_numeric($sellPrice)){
 			$player->sendMessage(BixbyMarket::$prefix . "Invalid price given.");
 			return;
 		}
-		$this->market->setBuyPrice($buyPrice);
-		$this->market->setSellPrice($sellPrice);
+		$this->market->setBuyPrice((int) $buyPrice);
+		$this->market->setSellPrice((int) $sellPrice);
 		$player->sendMessage(BixbyMarket::$prefix . "Success!");
 	}
 }
