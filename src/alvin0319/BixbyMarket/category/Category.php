@@ -37,7 +37,7 @@ final class Category implements JsonSerializable{
 		return $this->markets;
 	}
 
-	/** @param Market[] $items */
+	/** @param Market[] $markets */
 	public function setMarkets(array $markets) : void{
 		$this->markets = $markets;
 	}
