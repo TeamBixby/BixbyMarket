@@ -40,7 +40,7 @@ final class BixbyMarket extends PluginBase{
 			InvMenuHandler::register($this);
 		}
 		$this->marketManager = new MarketManager();
-		$this->categoryManager = new CategoryManager([]);
+		$this->categoryManager = new CategoryManager();
 		foreach(array_filter(scandir($this->getFile() . "resources/"), function(string $path) : bool{
 			return pathinfo($this->getFile() . "resources/" . $path, PATHINFO_EXTENSION) === "ini";
 		}) as $file){
