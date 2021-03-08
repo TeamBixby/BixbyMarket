@@ -199,9 +199,10 @@ final class InventoryListener{
 			$res = [];
 			foreach($menu->getInventory()->getContents(false) as $index => $item){
 				$market = BixbyMarket::getInstance()->getMarketManager()->getMarketByItem($item);
-				if($market !== null){
-					$res[$index] = $market;
+				if($market === null){
+					$market = BixbyMarket::getInstance()->getMarketManager()->registerMarket($item, -1, -1);
 				}
+				$res[$index] = $market;
 			}
 			$category->setMarkets($res);
 		});

@@ -54,11 +54,11 @@ final class MarketManager{
 		return array_values($this->markets);
 	}
 
-	public function registerMarket(Item $item, int $buyPrice, int $sellPrice) : void{
+	public function registerMarket(Item $item, int $buyPrice, int $sellPrice) : Market{
 		$id = 0;
 		while(isset($this->markets[$id]))
 			$id++;
 		$market = new Market($id, $item->setCount(1), $buyPrice, $sellPrice);
-		$this->markets[$market->getId()] = $market;
+		return $this->markets[$market->getId()] = $market;
 	}
 }
