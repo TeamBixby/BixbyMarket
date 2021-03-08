@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace alvin0319\BixbyMarket\market;
 
+use alvin0319\BixbyMarket\BixbyMarket;
 use alvin0319\BixbyMarket\util\MarketBuyResult;
 use alvin0319\BixbyMarket\util\MarketSellResult;
 use JsonSerializable;

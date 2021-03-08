@@ -53,7 +53,7 @@ final class InventoryListener{
 		}
 		$item = $action->getOut();
 
-		if($item->getNamedTagEntry("category") !== null){
+		if($item->getNamedTagEntry("category") === null){
 			return $action->discard();
 		}
 
@@ -83,8 +83,8 @@ final class InventoryListener{
 			$item = $market->getItem();
 			$item->setCustomName(BixbyMarket::getInstance()->getLanguage()->translateString("market.item.name", [$item->getName()]));
 
-			$buyPrice = $market->getBuyPrice() >= 0 ? "\$" . $market->getBuyPrice() : "§c-";
-			$sellPrice = $market->getSellPrice() >= 0 ? "\$" . $market->getSellPrice() : "§c-";
+			$buyPrice = $market->getBuyPrice() >= 0 ? $market->getBuyPrice() : "§c-";
+			$sellPrice = $market->getSellPrice() >= 0 ? $market->getSellPrice() : "§c-";
 
 			$lore = BixbyMarket::getInstance()->getLanguage()->translateString("market.item.lore", [$buyPrice, $sellPrice]);
 
@@ -159,6 +159,7 @@ final class InventoryListener{
 			}
 			BixbyMarket::getInstance()->getCategoryManager()->setCategories($res);
 		});
+		$menu->setListener(function(InvMenuTransaction $action) : InvMenuTransactionResult{ return $action->continue(); });
 		$menu->send($player);
 		$this->menus[$player->getName()] = $menu;
 	}

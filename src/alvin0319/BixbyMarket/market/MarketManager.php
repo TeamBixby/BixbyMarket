@@ -18,7 +18,7 @@ final class MarketManager{
 	protected array $markets = [];
 
 	public function __construct(){
-		if(!file_exists($file = BixbyMarket::getInstance()->getDataFolder() . "registered_markets.json")){
+		if(!file_exists($file = BixbyMarket::getInstance()->getDataFolder() . "markets.json")){
 			return;
 		}
 		$data = json_decode(file_get_contents($file), true);
@@ -33,7 +33,7 @@ final class MarketManager{
 		foreach($this->markets as $id => $market){
 			$res[] = $market->jsonSerialize();
 		}
-		file_put_contents(BixbyMarket::getInstance()->getDataFolder() . "registered_markets.json", json_encode($res, JSON_PRETTY_PRINT));
+		file_put_contents(BixbyMarket::getInstance()->getDataFolder() . "markets.json", json_encode($res, JSON_PRETTY_PRINT | JSON_BIGINT_AS_STRING));
 	}
 
 	public function getMarketById(int $id) : ?Market{

@@ -4,11 +4,22 @@ declare(strict_types=1);
 
 namespace alvin0319\BixbyMarket\category;
 
+use alvin0319\BixbyMarket\BixbyMarket;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function json_decode;
+use function json_encode;
+
 final class CategoryManager{
 	/** @var Category[] */
 	protected array $categories = [];
 
-	public function __construct(array $categories){
+	public function __construct(){
+		if(!file_exists($file = BixbyMarket::getInstance()->getDataFolder() . "categories.json")){
+			return;
+		}
+		$categories = json_decode(file_get_contents($file), true);
 		foreach($categories as $categoryIndex => $categoryData){
 			$category = Category::jsonDeserialize($categoryData);
 			$this->categories[$categoryIndex] = $category;
@@ -61,5 +72,13 @@ final class CategoryManager{
 			}
 		}
 		return null;
+	}
+
+	public function save() : void{
+		$res = [];
+		foreach($this->categories as $index => $category){
+			$res[$index] = $category->jsonSerialize();
+		}
+		file_put_contents(BixbyMarket::getInstance()->getDataFolder() . "categories.json", json_encode($res, JSON_PRETTY_PRINT | JSON_BIGINT_AS_STRING));
 	}
 }

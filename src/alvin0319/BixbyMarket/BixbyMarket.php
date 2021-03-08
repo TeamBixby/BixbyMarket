@@ -7,6 +7,8 @@ namespace alvin0319\BixbyMarket;
 use alvin0319\BixbyMarket\category\CategoryManager;
 use alvin0319\BixbyMarket\command\CategoryCommand;
 use alvin0319\BixbyMarket\command\CategoryCreateCommand;
+use alvin0319\BixbyMarket\command\CategoryEditCommand;
+use alvin0319\BixbyMarket\command\CategoryEditItemCommand;
 use alvin0319\BixbyMarket\command\MarketEditCommand;
 use alvin0319\BixbyMarket\lang\PluginLang;
 use alvin0319\BixbyMarket\market\MarketManager;
@@ -49,8 +51,15 @@ final class BixbyMarket extends PluginBase{
 		$this->getServer()->getCommandMap()->registerAll("bixbymarket", [
 			new CategoryCommand(),
 			new CategoryCreateCommand(),
+			new CategoryEditCommand(),
+			new CategoryEditItemCommand(),
 			new MarketEditCommand()
 		]);
+	}
+
+	public function onDisable() : void{
+		$this->marketManager->save();
+		$this->categoryManager->save();
 	}
 
 	public function getMarketManager() : MarketManager{

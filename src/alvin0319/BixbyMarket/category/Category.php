@@ -37,19 +37,9 @@ final class Category implements JsonSerializable{
 		return $this->markets;
 	}
 
-	/** @param Item[] $items */
-	public function setMarkets(array $items) : void{
-		$this->markets = [];
-		foreach($items as $index => $item){
-			if($item->getNamedTagEntry("marketId") === null){
-				continue;
-			}
-			$market = BixbyMarket::getInstance()->getMarketManager()->getMarketById($item->getNamedTagEntry("marketId")->getValue());
-			if($market === null){
-				continue;
-			}
-			$this->markets[$index] = $market;
-		}
+	/** @param Market[] $items */
+	public function setMarkets(array $markets) : void{
+		$this->markets = $markets;
 	}
 
 	public function getMarketByIndex(int $index) : ?Market{
