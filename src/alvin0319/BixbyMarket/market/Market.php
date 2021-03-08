@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace alvin0319\BixbyMarket\market;
 
 use alvin0319\BixbyMarket\BixbyMarket;
+use alvin0319\BixbyMarket\event\ItemBuyEvent;
+use alvin0319\BixbyMarket\event\ItemSellEvent;
 use alvin0319\BixbyMarket\util\MarketBuyResult;
 use alvin0319\BixbyMarket\util\MarketSellResult;
 use JsonSerializable;
@@ -66,6 +68,14 @@ final class Market implements JsonSerializable{
 		if(!$player->getInventory()->canAddItem($item)){
 			return MarketBuyResult::NOT_ENOUGH_INV();
 		}
+
+		$ev = new ItemBuyEvent($player, $this, $buyCount);
+		$ev->call();
+
+		if($ev->isCancelled()){
+			return MarketBuyResult::PLUGIN_CANCEL();
+		}
+
 		EconomyAPI::getInstance()->reduceMoney($player, $price);
 		$player->getInventory()->addItem($item);
 		return MarketBuyResult::SUCCESS();
@@ -80,6 +90,14 @@ final class Market implements JsonSerializable{
 		if(!$player->getInventory()->contains($item)){
 			return MarketSellResult::NO_ITEM();
 		}
+
+		$ev = new ItemSellEvent($player, $this, $sellCount);
+		$ev->call();
+
+		if($ev->isCancelled()){
+			return MarketSellResult::PLUGIN_CANCEL();
+		}
+
 		$player->getInventory()->removeItem($item);
 		EconomyAPI::getInstance()->addMoney($player, $this->sellPrice * $sellCount);
 		return MarketSellResult::SUCCESS();

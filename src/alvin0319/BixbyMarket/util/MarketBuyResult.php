@@ -16,7 +16,7 @@ use function strtoupper;
  * @method static MarketBuyResult NOT_ENOUGH_INV()
  * @method static MarketBuyResult NOT_ENOUGH_MONEY(),
  * @method static MarketBuyResult NOT_BUYABLE()
- * @method static MarketSellResult PLUGIN_CANCEL()
+ * @method static MarketBuyResult PLUGIN_CANCEL()
  */
 
 final class MarketBuyResult{
