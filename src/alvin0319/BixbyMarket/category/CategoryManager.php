@@ -44,6 +44,11 @@ final class CategoryManager{
 		}
 	}
 
+	/** @param Category[] $categories */
+	public function setCategories(array $categories) : void{
+		$this->categories = $categories;
+	}
+
 	/** @return Category[] */
 	public function getCategories() : array{
 		return $this->categories;

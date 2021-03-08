@@ -136,7 +136,7 @@ final class InventoryListener{
 		return $action->discard();
 	}
 
-	public function sendCategoryEditForm(Player $player, ?InvMenu $menu = null) : void{
+	public function sendCategoryEdit(Player $player) : void{
 		$menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
 		$menu->setName("Choose a category");
 		$menu->setListener(Closure::fromCallable([$this, "handleCategoryEdit"]));
@@ -147,10 +147,17 @@ final class InventoryListener{
 			$item->setNamedTagEntry(new StringTag("category", $category->getName()));
 			$menu->getInventory()->setItem($categoryIndex, $item);
 		}
-		$menu->setInventoryCloseListener(function(Player $player) : void{
-			if(isset($this->menus[$player->getName()])){
-				unset($this->menus[$player->getName()]);
+		$menu->setInventoryCloseListener(function(Player $p) use ($menu) : void{
+			if(isset($this->menus[$p->getName()])){
+				unset($this->menus[$p->getName()]);
 			}
+			$res = [];
+			foreach($menu->getInventory()->getContents(false) as $index => $item){
+				if($item->getNamedTagEntry("category") !== null){
+					$res[$index] = BixbyMarket::getInstance()->getCategoryManager()->getCategory($item->getNamedTagEntry("category")->getValue());
+				}
+			}
+			BixbyMarket::getInstance()->getCategoryManager()->setCategories($res);
 		});
 		$menu->send($player);
 		$this->menus[$player->getName()] = $menu;
@@ -159,9 +166,59 @@ final class InventoryListener{
 	public function handleCategoryEdit(InvMenuTransaction $action) : InvMenuTransactionResult{
 		$player = $action->getPlayer();
 		$menu = $this->menus[$player->getName()] ?? null;
+		$item = $action->getOut();
+
 		if($menu === null){
 			return $action->discard();
 		}
-		
+		if($item->getNamedTagEntry("category") === null){
+			return $action->discard();
+		}
+		return $action->continue();
+	}
+
+	public function sendCategoryItemEdit(Player $player, Category $category) : void{
+		$menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
+		$menu->setName($category->getName() . " Category edit");
+
+		foreach($category->getMarkets() as $index => $market){
+			$item = $market->getItem();
+
+			$menu->getInventory()->setItem($index, $item);
+		}
+
+		$item = ItemFactory::get(BlockIds::BED_BLOCK, 0, 1)
+			->setCustomName(BixbyMarket::getInstance()->getLanguage()->translateString("market.item.sellall.name"));
+		$item->setNamedTagEntry(new StringTag("sellall", ""));
+		$menu->getInventory()->setItem(53, $item);
+
+		$menu->setInventoryCloseListener(function(Player $p) use ($menu, $category) : void{
+			if(isset($this->menus[$p->getName()])){
+				unset($this->menus[$p->getName()]);
+			}
+			$res = [];
+			foreach($menu->getInventory()->getContents(false) as $index => $item){
+				$market = BixbyMarket::getInstance()->getMarketManager()->getMarketByItem($item);
+				if($market !== null){
+					$res[$index] = $market;
+				}
+			}
+			$category->setMarkets($res);
+		});
+
+		$menu->send($player);
+
+		$this->menus[$player->getName()] = $menu;
+	}
+
+	public function handleCategoryItemEdit(InvMenuTransaction $action) : InvMenuTransactionResult{
+		$player = $action->getPlayer();
+		$menu = $this->menus[$player->getName()] ?? null;
+
+		if($menu === null){
+			return $action->discard();
+		}
+
+		return $action->continue();
 	}
 }
