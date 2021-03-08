@@ -63,7 +63,7 @@ class MarketBuySellForm implements Form{
 			}
 			switch($result->name()){
 				case MarketBuyResult::NOT_BUYABLE()->name():
-					$player->sendMessage(BixbyMarket::$prefix . "This market can't be bought.");
+					$player->sendMessage(BixbyMarket::$prefix . "This item can't be bought.");
 					break;
 				case MarketBuyResult::NOT_ENOUGH_INV():
 					$player->sendMessage(BixbyMarket::$prefix . "You don't have enough inventory slot to buy this item.");
@@ -84,7 +84,7 @@ class MarketBuySellForm implements Form{
 			}
 			switch($result->name()){
 				case MarketSellResult::NOT_SELLABLE()->name():
-					$player->sendMessage(BixbyMarket::$prefix . "This market can't be sold.");
+					$player->sendMessage(BixbyMarket::$prefix . "This item can't be sold.");
 					break;
 				case MarketSellResult::NO_ITEM():
 					$player->sendMessage(BixbyMarket::$prefix . "You don't have enough item to sell this item.");

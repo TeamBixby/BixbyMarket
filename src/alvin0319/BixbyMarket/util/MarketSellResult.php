@@ -19,7 +19,7 @@ use function strtoupper;
  */
 
 final class MarketSellResult{
-	/** @var MarketBuyResult[] */
+	/** @var MarketSellResult[] */
 	private static array $registries = [];
 
 	private static function lazyInit() : void{
@@ -42,7 +42,7 @@ final class MarketSellResult{
 			self::register($result);
 	}
 
-	public static function __callStatic(string $name, array $arguments = []) : MarketBuyResult{
+	public static function __callStatic(string $name, array $arguments = []) : MarketSellResult{
 		self::lazyInit();
 		if(!isset(self::$registries[strtolower($name)])){
 			throw new BadMethodCallException("Call to undefined static method " . get_class(self::class) . "::" . strtoupper($name) . "()");

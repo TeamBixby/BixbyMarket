@@ -154,7 +154,10 @@ final class InventoryListener{
 			$res = [];
 			foreach($menu->getInventory()->getContents(false) as $index => $item){
 				if($item->getNamedTagEntry("category") !== null){
-					$res[$index] = BixbyMarket::getInstance()->getCategoryManager()->getCategory($item->getNamedTagEntry("category")->getValue());
+					$category = BixbyMarket::getInstance()->getCategoryManager()->getCategory($item->getNamedTagEntry("category")->getValue());
+					if($category !== null){
+						$res[$index] = $category;
+					}
 				}
 			}
 			BixbyMarket::getInstance()->getCategoryManager()->setCategories($res);
@@ -175,6 +178,7 @@ final class InventoryListener{
 		if($item->getNamedTagEntry("category") === null){
 			return $action->discard();
 		}
+
 		return $action->continue();
 	}
 
