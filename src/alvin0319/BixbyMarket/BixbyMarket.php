@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace alvin0319\BixbyMarket;
 
 use alvin0319\BixbyMarket\category\CategoryManager;
+use alvin0319\BixbyMarket\command\CategoryCommand;
+use alvin0319\BixbyMarket\command\CategoryCreateCommand;
+use alvin0319\BixbyMarket\command\MarketEditCommand;
 use alvin0319\BixbyMarket\lang\PluginLang;
 use alvin0319\BixbyMarket\market\MarketManager;
 use muqsit\invmenu\InvMenuHandler;
@@ -42,6 +45,12 @@ final class BixbyMarket extends PluginBase{
 			$this->saveResource($file);
 		}
 		$this->lang = new PluginLang($this->getConfig()->get("lang", "eng"), $this->getDataFolder(), "eng");
+
+		$this->getServer()->getCommandMap()->registerAll("bixbymarket", [
+			new CategoryCommand(),
+			new CategoryCreateCommand(),
+			new MarketEditCommand()
+		]);
 	}
 
 	public function getMarketManager() : MarketManager{

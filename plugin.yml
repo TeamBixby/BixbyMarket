@@ -4,6 +4,12 @@ main: alvin0319\BixbyMarket\BixbyMarket
 version: 1.0.0
 api: 3.0.0
 
+depend:
+  - EconomyAPI
+
+virion:
+  - InvMenu
+
 permissions:
   bixbymarket.command.create:
     default: op
@@ -12,6 +18,8 @@ permissions:
   bixbymarket.command.create_category:
     default: op
   bixbymarket.command.remove_category:
+    default: op
+  bixbymarket.command.edit_market:
     default: op
   bixbymarket.command.open_category:
     default: true
